@@ -27,13 +27,13 @@ export class ModuleImport {
   constructor(public importObj: string, public path: string) {}
 
   esm() {
-    const [imp, frm, semi] = ModuleImport.#esmKeyWords;
-    return [imp, this.importObj, frm, this.path, semi].join("");
+    const kw = ModuleImport.#esmKeyWords;
+    return [kw[0], this.importObj, kw[1], this.path, kw[2]].join("");
   }
 
   commonJs() {
-    const [cnst, req, close] = ModuleImport.#commonjsKeyWords;
-    return [cnst, this.importObj, req, this.path, close].join("");
+    const kw = ModuleImport.#commonjsKeyWords;
+    return [kw[0], this.importObj, kw[1], this.path, kw[2]].join("");
   }
 
   static bundle(...params: string[][]) {

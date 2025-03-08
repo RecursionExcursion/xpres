@@ -14,6 +14,10 @@ export class Template {
     return this.#fields.fileName;
   }
 
+  set fileName(newFileName: string) {
+    this.#fields.fileName = newFileName;
+  }
+
   get content() {
     return this.#fields.content;
   }
