@@ -1,0 +1,7 @@
+{
+  "restartable": "rs",
+  "colours": true,
+  "watch": ["./src", "./test"],
+  "exec": "npm run build && npm run start",
+  "ext": "ts"
+}
