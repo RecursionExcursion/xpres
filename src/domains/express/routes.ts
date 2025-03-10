@@ -3,7 +3,9 @@ import { expressController } from "./controller";
 
 const expressRouter = Router();
 
-expressRouter.get("/express", expressController.getExpressStarter )
-expressRouter.post("/express", expressController.createExpressStarter )
+const path = "/express";
+
+expressRouter.get(path, expressController.getExpressStarter);
+expressRouter.post(path, expressController.createExpressStarter);
 
 export { expressRouter };

@@ -1,18 +1,43 @@
-import { VirtualFileSystem } from "../../lib/vfs";
-import { expressStarterFactory } from "./lib/express-starter";
-
-import { packageJsonTemplate } from "./lib/templates/node/packageJson";
+import { projectFactory } from "./lib/project-factory";
+import { RequestDTO } from "./requestDTO";
 
 export const expressService = {
-  createExpressStarter() {
-    const starter = expressStarterFactory({
-      dependencies: ["express"],
-      devDependencies: ["typescript"],
-      packageJson: packageJsonTemplate,
-      code: "",
-      misc: {},
-    });
+  createExpressProject() {
+    //This will be passed as a arg
+    const request: RequestDTO = {
+      runtime: "node",
+      packageJson: {
+        dependencies: [],
+        devDependencies: [],
+        scripts: {},
+        moduleType: "commonjs",
+      },
+      src: {
+        use: true,
+        includeFolder: true,
+        domains: ["foofers", "poofers"],
+      },
+      git: {
+        ignore: true,
+        toIgnore: ["/test", "/dist"],
+      },
+      env: {
+        use: true,
+        vars: {
+          PORT: "8080",
+        },
+      },
+      ts: {
+        use: true,
+        useDefaultNpmPackage: true,
+        findTypeDependencies: true,
+        config: {
+          use: true,
+          args: {},
+        },
+      },
+    };
 
-    return new VirtualFileSystem("/app", starter);
+    return projectFactory(request);
   },
 };

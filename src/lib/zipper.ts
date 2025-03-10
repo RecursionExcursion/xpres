@@ -51,3 +51,19 @@ function zipVfs(
     }
   });
 }
+
+export function zipFileMap(fileMap: Map<string, string>, res: Response) {
+  const archive = archiver("zip", {
+    zlib: { level: 9 },
+  });
+  initArchiver(archive);
+  archive.pipe(res);
+  // zipVfs(vfs, archive, vfs.root, "");
+  zipMap(archive, fileMap);
+  archive.finalize();
+}
+function zipMap(archive: Archiver, files: Map<string, string>) {
+  for (const [filePath, content] of files.entries()) {
+    archive.append(content, { name: filePath });
+  }
+}

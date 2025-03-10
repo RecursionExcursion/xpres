@@ -1,18 +1,89 @@
-import { Template } from "../types";
+import { Template } from "./types";
 
-export const tsConfigTemplate = new Template({
-  fileName: "tsconfig.json",
-  content: {
-    compilerOptions: {
-      target: "es2016",
-      module: "commonjs",
-      esModuleInterop: true,
-      forceConsistentCasingInFileNames: true,
-      strict: true,
-      skipLibCheck: true,
-    },
-  },
-});
+export type TsConfigType = {
+  target?:
+    | "es3"
+    | "es5"
+    | "es6"
+    | "es2015"
+    | "es2016"
+    | "es2017"
+    | "es2018"
+    | "es2019"
+    | "es2020"
+    | "es2021"
+    | "es2022"
+    | "esnext";
+  module?:
+    | "commonjs"
+    | "amd"
+    | "system"
+    | "umd"
+    | "es6"
+    | "es2015"
+    | "esnext"
+    | "none";
+  esModuleInterop?: boolean;
+  forceConsistentCasingInFileNames?: boolean;
+  strict?: boolean;
+  skipLibCheck?: boolean;
+  lib?: string[];
+  jsx?: "preserve" | "react" | "react-jsx" | "react-jsxdev";
+  moduleResolution?: "node" | "classic" | "node10" | "node16" | "bundler";
+  allowJs?: boolean;
+  checkJs?: boolean;
+  sourceMap?: boolean;
+  inlineSourceMap?: boolean;
+  noEmit?: boolean;
+  outDir?: string;
+  rootDir?: string;
+  removeComments?: boolean;
+  declaration?: boolean;
+  emitDeclarationOnly?: boolean;
+  noImplicitAny?: boolean;
+  strictNullChecks?: boolean;
+  strictFunctionTypes?: boolean;
+  noUnusedLocals?: boolean;
+  noUnusedParameters?: boolean;
+  noImplicitReturns?: boolean;
+  noFallthroughCasesInSwitch?: boolean;
+  [key: string]: any; // Allow unknown properties for future-proofing
+};
+
+export class TsConfigGenerator {
+  base: TsConfigType = {
+    rootDir: "./",
+    outDir: "./dist",
+    target: "es2016",
+    module: "commonjs",
+    esModuleInterop: true,
+    forceConsistentCasingInFileNames: true,
+    strict: true,
+    skipLibCheck: true,
+  };
+
+  constructor(optionArgs?: { [key: string]: string }) {
+    Object.assign(this.base, optionArgs);
+  }
+
+  toJson() {
+    return JSON.stringify(
+      {
+        compilerOptions: this.base,
+      },
+      null,
+      2
+    );
+  }
+
+  get rootDir() {
+    return this.base.rootDir;
+  }
+
+  get outDir() {
+    return this.base.outDir;
+  }
+}
 
 export const tsConfigTemplateString = `
     {
