@@ -1,19 +1,44 @@
 import { NextFunction, Request, Response } from "express";
 import { expressService } from "./service";
-import { zip, zipFileMap } from "../../lib/zipper";
+import { zipFileMap } from "../../lib/zipper";
+import { projectTemplates } from "./lib/project-templates";
+import { RequestDTO } from "./requestDTO";
+import { findNpmPacakgeVersion } from "./lib/npm-pacakge-finder";
 
 export const expressController = {
-  async getExpressStarter(req: Request, res: Response, next: NextFunction) {
+  async createExpressStarter(req: Request, res: Response, next: NextFunction) {
+    //TODO impl validation
+    const payload = req.body as RequestDTO;
+
     res.setHeader("Content-Type", "application/zip");
-    zipFileMap(expressService.createExpressProject(), res);
+    zipFileMap(await expressService.createExpressProject(payload), res);
   },
 
-  async createExpressStarter(req: Request, res: Response, next: NextFunction) {
+  async getExpressStarterTemplate(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { template } = req.params;
 
-    const payload = req.body
-
+    console.log({ template });
+    if (!projectTemplates[template]) {
+      res.sendStatus(400);
+      return;
+    }
 
     res.setHeader("Content-Type", "application/zip");
-    zipFileMap(expressService.createExpressProject(), res);
+    zipFileMap(
+      await expressService.createExpressProject(projectTemplates[template]),
+      res
+    );
+  },
+
+  async test(req: Request, res: Response) {
+    const { packageName } = req.params;
+
+    const v = await findNpmPacakgeVersion(packageName);
+
+    res.send({ v });
   },
 };

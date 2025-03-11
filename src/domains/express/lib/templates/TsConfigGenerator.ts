@@ -1,5 +1,3 @@
-import { Template } from "./types";
-
 export type TsConfigType = {
   target?:
     | "es3"
@@ -47,7 +45,7 @@ export type TsConfigType = {
   noUnusedParameters?: boolean;
   noImplicitReturns?: boolean;
   noFallthroughCasesInSwitch?: boolean;
-  [key: string]: any; // Allow unknown properties for future-proofing
+  [key: string]: any; // unknown props
 };
 
 export class TsConfigGenerator {

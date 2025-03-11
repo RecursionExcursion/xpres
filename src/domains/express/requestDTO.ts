@@ -1,6 +1,7 @@
 import { ModuleType } from "./constants";
 
 export type RequestDTO = {
+  name: string,
   runtime: "node";
   packageJson: {
     moduleType: ModuleType;
@@ -28,7 +29,7 @@ export type RequestDTO = {
     useDefaultNpmPackage: boolean;
     findTypeDependencies: boolean;
     config: {
-      use: true;
+      use: boolean;
       args: {
         [key: string]: string;
       };

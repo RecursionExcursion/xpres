@@ -1,16 +1,19 @@
 import archiver, { Archiver } from "archiver";
 import { Response } from "express";
-import path from "path";
-import { VirtualFileSystem } from "./vfs";
 
-export async function zip(vfs: VirtualFileSystem, res: Response) {
+export function zipFileMap(fileMap: Map<string, string>, res: Response) {
   const archive = archiver("zip", {
     zlib: { level: 9 },
   });
   initArchiver(archive);
   archive.pipe(res);
-  zipVfs(vfs, archive, vfs.root, "");
+  zipMap(archive, fileMap);
   archive.finalize();
+}
+function zipMap(archive: Archiver, files: Map<string, string>) {
+  for (const [filePath, content] of files.entries()) {
+    archive.append(content, { name: filePath });
+  }
 }
 
 function initArchiver(archive: Archiver) {
@@ -25,45 +28,4 @@ function initArchiver(archive: Archiver) {
   archive.on("error", function (err) {
     throw err;
   });
-}
-
-function zipVfs(
-  vfs: VirtualFileSystem,
-  archive: Archiver,
-  dir: string,
-  zipDir?: string
-) {
-  if (!vfs.exists(dir)) return;
-
-  const contents = vfs.readDir(dir);
-
-  contents.forEach((c) => {
-    const fileName = c.toString();
-
-    const src = path.join(dir, fileName);
-    const zipPath = zipDir ? path.join(zipDir, fileName) : fileName;
-
-    if (vfs.isDir(src)) {
-      zipVfs(vfs, archive, src, zipPath);
-    } else {
-      const fsStream = vfs.streamFile(src);
-      archive.append(fsStream, { name: zipPath });
-    }
-  });
-}
-
-export function zipFileMap(fileMap: Map<string, string>, res: Response) {
-  const archive = archiver("zip", {
-    zlib: { level: 9 },
-  });
-  initArchiver(archive);
-  archive.pipe(res);
-  // zipVfs(vfs, archive, vfs.root, "");
-  zipMap(archive, fileMap);
-  archive.finalize();
-}
-function zipMap(archive: Archiver, files: Map<string, string>) {
-  for (const [filePath, content] of files.entries()) {
-    archive.append(content, { name: filePath });
-  }
 }
