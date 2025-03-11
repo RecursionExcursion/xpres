@@ -6,6 +6,8 @@ const PORT = process.env.PORT;
 
 const app = Express();
 
+app.use(Express.json());
+
 app.use("/", expressRouter);
 
 app.use(globalErrorHandler);

@@ -9,6 +9,10 @@ export const expressController = {
   },
 
   async createExpressStarter(req: Request, res: Response, next: NextFunction) {
+
+    const payload = req.body
+
+
     res.setHeader("Content-Type", "application/zip");
     zipFileMap(expressService.createExpressProject(), res);
   },
