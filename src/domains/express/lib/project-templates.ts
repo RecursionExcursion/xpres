@@ -1,6 +1,6 @@
-import { RequestDTO } from "../requestDTO";
+import { ProjectRequestDTO } from "../project-request-dto";
 
-export const projectTemplates: Record<string, RequestDTO> = {
+export const projectTemplates: Record<string, ProjectRequestDTO> = {
   ts: {
     name: "Foo",
     runtime: "node",

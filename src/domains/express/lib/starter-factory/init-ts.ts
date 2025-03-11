@@ -1,5 +1,6 @@
 import { TS_CONFIG } from "../../constants";
-import { TsConfigGenerator } from "../templates/TsConfigGenerator";
+import { generateTsConfig } from "../templates/generators/ts-config-generator";
+
 import { PipeParams } from "./project-factory";
 
 export function initTs(params: PipeParams): PipeParams {
@@ -10,8 +11,8 @@ export function initTs(params: PipeParams): PipeParams {
     }
 
     if (request.ts.config.use) {
-      const config = new TsConfigGenerator();
-      projectMap.set(`/${TS_CONFIG}`, config.toJson());
+      const config = generateTsConfig();
+      projectMap.set(`/${TS_CONFIG}`, config.fileContent);
 
       //set up scripts for ts
       if (!request.packageJson.scripts.start) {

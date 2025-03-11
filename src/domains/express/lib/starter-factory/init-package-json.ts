@@ -1,6 +1,6 @@
 import { PACKAGE_JSON } from "../../constants";
-import { RequestDTO } from "../../requestDTO";
-import { generatePackageJson } from "../templates/package-json-generator";
+import { ProjectRequestDTO } from "../../project-request-dto";
+import { generatePackageJson } from "../templates/generators/package-json-generator";
 import { PipeParams } from "./project-factory";
 
 export async function initPackageJson(params: PipeParams): Promise<PipeParams> {
@@ -20,7 +20,7 @@ export async function initPackageJson(params: PipeParams): Promise<PipeParams> {
   return params;
 }
 
-function setScripts(request: RequestDTO) {
+function setScripts(request: ProjectRequestDTO) {
   if (!request.packageJson.scripts["start"]) {
     let startScriptTemplate = "node <env-config> <target-file>";
 

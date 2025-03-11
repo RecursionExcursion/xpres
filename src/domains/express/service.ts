@@ -1,8 +1,8 @@
 import { projectFactory } from "./lib/starter-factory/project-factory";
-import { RequestDTO } from "./requestDTO";
+import { ProjectRequestDTO } from "./project-request-dto";
 
 export const expressService = {
-  async createExpressProject(request: RequestDTO) {
+  async createExpressStarterProject(request: ProjectRequestDTO) {
     return await projectFactory(request);
   },
 };

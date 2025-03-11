@@ -1,7 +1,7 @@
-import { RequestDTO } from "../../requestDTO";
-import { JS_FileWriter } from "../file-generators/js/js-file-writer";
-import { ModuleImport } from "../file-generators/js/module-import";
-import { ModuleExport } from "../file-generators/module-export";
+import { ProjectRequestDTO } from "../../project-request-dto";
+import { generateJsFile } from "../file-generators/js/js-file-writer";
+import { ModuleExport } from "../file-generators/js/module-export";
+import { createModuleImport } from "../file-generators/js/module-import";
 import { PipeParams } from "./project-factory";
 
 export function initSrc(params: PipeParams): PipeParams {
@@ -53,14 +53,11 @@ export function initSrc(params: PipeParams): PipeParams {
           usingTs,
         });
 
-        projectMap.set(
-          `${domainDir}/${routerFileNameWithExt}`,
-          routerFile.generate()
-        );
+        projectMap.set(`${domainDir}/${routerFileNameWithExt}`, routerFile);
 
         projectMap.set(
           `${domainDir}/${controllerFileNameWithExt}`,
-          controllerFile.generate()
+          controllerFile
         );
 
         domainRouters.push({
@@ -85,21 +82,22 @@ export function initSrc(params: PipeParams): PipeParams {
       });
     }
 
-    const indexFile = createIndexFile({
-      request,
-      domainRouters,
-      script: indexScript,
-      usingTs,
-    });
+    const { fileName: indexFileName, content: indexFileContent } =
+      createIndexFile({
+        request,
+        domainRouters,
+        script: indexScript,
+        usingTs,
+      });
 
-    projectMap.set(`/${srcRoot}/${indexFile.fileName}`, indexFile.generate());
+    projectMap.set(`/${srcRoot}/${indexFileName}`, indexFileContent);
   }
 
   return params;
 }
 
 function createIndexFile(params: {
-  request: RequestDTO;
+  request: ProjectRequestDTO;
   domainRouters: {
     path: string;
     name: string;
@@ -108,18 +106,21 @@ function createIndexFile(params: {
   usingTs: boolean;
 }) {
   const { request, domainRouters, script, usingTs } = params;
-  return new JS_FileWriter({
-    fileName: request.ts.use ? "index.ts" : "index.js",
-    importStatements: [
-      new ModuleImport({
+
+  const fileName = request.ts.use ? "index.ts" : "index.js";
+
+  const content = generateJsFile({
+    fileName,
+    importGenerators: [
+      createModuleImport({
         path: "express",
-        default: "Express",
+        defaultImport: "Express",
       }),
       //import routers
       ...domainRouters.map((dr) => {
-        return new ModuleImport({
+        return createModuleImport({
           path: dr.path,
-          destructured: [dr.name],
+          destructuredImports: [dr.name],
         });
       }),
     ],
@@ -127,10 +128,12 @@ function createIndexFile(params: {
     moduleType: request.packageJson.moduleType,
     ts: usingTs,
   });
+
+  return { fileName, content };
 }
 
 function createRouterFile(params: {
-  request: RequestDTO;
+  request: ProjectRequestDTO;
   domain: string;
   fileName: string;
   routerName: string;
@@ -150,17 +153,17 @@ function createRouterFile(params: {
 
   const capitalizedDomainName = capitalizeFirstLetter(domain);
 
-  return new JS_FileWriter({
+  return generateJsFile({
     fileName: fileName,
-    importStatements: [
-      new ModuleImport({
+    importGenerators: [
+      createModuleImport({
         path: "express",
-        destructured: ["Router"],
+        destructuredImports: ["Router"],
       }),
-      new ModuleImport({
+      createModuleImport({
         //TODO This is not compataible atm with ts (will include file ext)
         path: controllerFileName,
-        destructured: [controllerName],
+        destructuredImports: [controllerName],
       }),
     ],
     scriptLines: [
@@ -182,7 +185,7 @@ function createRouterFile(params: {
 }
 
 function createControllerFile(params: {
-  request: RequestDTO;
+  request: ProjectRequestDTO;
   domain: string;
   controllerFileName: string;
   controllerName: string;
@@ -193,9 +196,9 @@ function createControllerFile(params: {
 
   const capitalizedDomainName = capitalizeFirstLetter(domain);
 
-  return new JS_FileWriter({
+  return generateJsFile({
     fileName: controllerFileName,
-    importStatements: [],
+    importGenerators: [],
     scriptLines: [
       `const ${controllerName} = {
         create${capitalizedDomainName}(){},

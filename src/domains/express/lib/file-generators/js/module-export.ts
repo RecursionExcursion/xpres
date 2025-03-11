@@ -1,4 +1,4 @@
-import { ModuleType } from "../../constants";
+import { ModuleType } from "../../../constants";
 
 type ExportType = "default" | "destructured";
 

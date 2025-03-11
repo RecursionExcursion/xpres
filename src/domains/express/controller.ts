@@ -2,16 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import { expressService } from "./service";
 import { zipFileMap } from "../../lib/zipper";
 import { projectTemplates } from "./lib/project-templates";
-import { RequestDTO } from "./requestDTO";
+import { ProjectRequestDTO } from "./project-request-dto";
 import { findNpmPacakgeVersion } from "./lib/npm-pacakge-finder";
 
 export const expressController = {
   async createExpressStarter(req: Request, res: Response, next: NextFunction) {
     //TODO impl validation
-    const payload = req.body as RequestDTO;
+    const payload = req.body as ProjectRequestDTO;
 
     res.setHeader("Content-Type", "application/zip");
-    zipFileMap(await expressService.createExpressProject(payload), res);
+    zipFileMap(await expressService.createExpressStarterProject(payload), res);
   },
 
   async getExpressStarterTemplate(
@@ -21,7 +21,6 @@ export const expressController = {
   ) {
     const { template } = req.params;
 
-    console.log({ template });
     if (!projectTemplates[template]) {
       res.sendStatus(400);
       return;
@@ -29,7 +28,7 @@ export const expressController = {
 
     res.setHeader("Content-Type", "application/zip");
     zipFileMap(
-      await expressService.createExpressProject(projectTemplates[template]),
+      await expressService.createExpressStarterProject(projectTemplates[template]),
       res
     );
   },

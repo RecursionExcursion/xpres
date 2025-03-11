@@ -4,8 +4,6 @@ export async function findNpmPacakgeVersion(packageName: string) {
   try {
     const res = await fetch(`https://registry.npmjs.org/${packageName}`);
 
-    console.log(res.ok);
-
     if (!res.ok) {
       return null;
     }
@@ -22,5 +20,4 @@ export async function findNpmPacakgeVersion(packageName: string) {
   } catch {
     return null;
   }
-  //   return data.versions;
 }

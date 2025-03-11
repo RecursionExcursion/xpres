@@ -1,6 +1,6 @@
 import { ModuleType } from "./constants";
 
-export type RequestDTO = {
+export type ProjectRequestDTO = {
   name: string,
   runtime: "node";
   packageJson: {

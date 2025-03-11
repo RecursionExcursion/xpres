@@ -48,8 +48,8 @@ export type TsConfigType = {
   [key: string]: any; // unknown props
 };
 
-export class TsConfigGenerator {
-  base: TsConfigType = {
+export function generateTsConfig(optionArgs?: { [key: string]: string }) {
+  const base: TsConfigType = {
     rootDir: "./",
     outDir: "./dist",
     target: "es2016",
@@ -59,29 +59,32 @@ export class TsConfigGenerator {
     strict: true,
     skipLibCheck: true,
   };
+  Object.assign(base, optionArgs);
 
-  constructor(optionArgs?: { [key: string]: string }) {
-    Object.assign(this.base, optionArgs);
-  }
+  const fileContent = JSON.stringify({ compilerOptions: base }, null, 2);
+  const rootDir = () => base.rootDir;
+  const outDir = () => base.outDir;
 
-  toJson() {
-    return JSON.stringify(
-      {
-        compilerOptions: this.base,
-      },
-      null,
-      2
-    );
-  }
-
-  get rootDir() {
-    return this.base.rootDir;
-  }
-
-  get outDir() {
-    return this.base.outDir;
-  }
+  return {
+    fileContent,
+    outDir,
+    rootDir,
+  };
 }
+
+// export class TsConfigGenerator {
+//   constructor(optionArgs?: { [key: string]: string }) {}
+
+//   toJson() {}
+
+//   get rootDir() {
+//     return this.base.rootDir;
+//   }
+
+//   get outDir() {
+//     return this.base.outDir;
+//   }
+// }
 
 export const tsConfigTemplateString = `
     {

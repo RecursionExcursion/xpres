@@ -1,59 +1,115 @@
 import { ModuleType } from "../../../constants";
 
-export class ModuleImport {
-  destructured?: string[];
-  default?: string;
-  path!: string;
+const createImportStatment = (() => {
+  const esmKeyWords = ["import ", ` from "`, `";`];
+  const commonjsKeyWords = ["const ", ` = require("`, `");`];
 
-  constructor(params: Partial<ModuleImport> & { path: string }) {
-    Object.assign(this, params);
-  }
+  return (type: ModuleType, importObjects: string, path: string) => {
+    const keyWords =
+      type === "module" ? [...esmKeyWords] : [...commonjsKeyWords];
+    keyWords.splice(1, 0, importObjects);
+    keyWords.splice(keyWords.length - 1, 0, path);
+    return keyWords.join("");
+  };
+})();
 
-  module(): string {
+export type ModuleImportGenerator = {
+  module: () => string;
+  commonjs: () => string;
+};
+
+interface ModuleImport {
+  destructuredImports?: string[];
+  defaultImport?: string;
+  path: string;
+}
+
+export function createModuleImport(
+  params: ModuleImport
+): ModuleImportGenerator {
+  const { path, defaultImport, destructuredImports = [] } = params;
+
+  const module = () => {
     const importObjects = [];
 
-    if (this.default) {
-      importObjects.push(this.default);
+    if (defaultImport) {
+      importObjects.push(defaultImport);
     }
 
-    if (this.destructured) {
-      importObjects.push(this.#toDestructredObjectString());
+    if (destructuredImports) {
+      importObjects.push(toDestructredObjectString(destructuredImports));
     }
 
-    return ModuleImport.#createImportStatment(
-      "module",
-      importObjects.join(", "),
-      this.path
-    );
-  }
+    return createImportStatment("module", importObjects.join(", "), path);
+  };
 
-  commonjs(): string {
-    const importObjects = this.default
-      ? this.default
-      : this.#toDestructredObjectString();
+  const commonjs = () => {
+    const importObjects = defaultImport
+      ? defaultImport
+      : toDestructredObjectString(destructuredImports);
 
-    return ModuleImport.#createImportStatment(
-      "commonjs",
-      importObjects,
-      this.path
-    );
-  }
+    return createImportStatment("commonjs", importObjects, path);
+  };
 
-  #toDestructredObjectString() {
-    const objs = this.destructured;
-    return objs?.length ? `{ ${objs?.join(", ")} }` : "";
-  }
-
-  static #createImportStatment = (() => {
-    const esmKeyWords = ["import ", ` from "`, `";`];
-    const commonjsKeyWords = ["const ", ` = require("`, `");`];
-
-    return (type: ModuleType, importObjects: string, path: string) => {
-      const keyWords =
-        type === "module" ? [...esmKeyWords] : [...commonjsKeyWords];
-      keyWords.splice(1, 0, importObjects);
-      keyWords.splice(keyWords.length - 1, 0, path);
-      return keyWords.join("");
-    };
-  })();
+  return { module, commonjs };
 }
+
+function toDestructredObjectString(destructuredImportObjs: string[]) {
+  const objs = destructuredImportObjs;
+  return objs?.length ? `{ ${objs?.join(", ")} }` : "";
+}
+
+// static #createImportStatment = (() => {
+//   const esmKeyWords = ["import ", ` from "`, `";`];
+//   const commonjsKeyWords = ["const ", ` = require("`, `");`];
+
+//   return (type: ModuleType, importObjects: string, path: string) => {
+//     const keyWords =
+//       type === "module" ? [...esmKeyWords] : [...commonjsKeyWords];
+//     keyWords.splice(1, 0, importObjects);
+//     keyWords.splice(keyWords.length - 1, 0, path);
+//     return keyWords.join("");
+//   };
+// })();
+
+// export class ModuleImport2 {
+//   destructured?: string[];
+//   default?: string;
+//   path!: string;
+
+//   constructor(params: Partial<ModuleImport> & { path: string }) {
+//     Object.assign(this, params);
+//   }
+
+//   module(): string {}
+
+//   commonjs(): string {
+//     const importObjects = this.default
+//       ? this.default
+//       : this.#toDestructredObjectString();
+
+//     return ModuleImport.#createImportStatment(
+//       "commonjs",
+//       importObjects,
+//       this.path
+//     );
+//   }
+
+//   // #toDestructredObjectString() {
+//   //   const objs = this.destructured;
+//   //   return objs?.length ? `{ ${objs?.join(", ")} }` : "";
+//   // }
+
+//   // static #createImportStatment = (() => {
+//   //   const esmKeyWords = ["import ", ` from "`, `";`];
+//   //   const commonjsKeyWords = ["const ", ` = require("`, `");`];
+
+//   //   return (type: ModuleType, importObjects: string, path: string) => {
+//   //     const keyWords =
+//   //       type === "module" ? [...esmKeyWords] : [...commonjsKeyWords];
+//   //     keyWords.splice(1, 0, importObjects);
+//   //     keyWords.splice(keyWords.length - 1, 0, path);
+//   //     return keyWords.join("");
+//   //   };
+//   // })();
+// }

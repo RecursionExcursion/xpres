@@ -1,7 +1,7 @@
 import { JSONSchemaType } from "ajv";
-import { RequestDTO } from "../../../domains/express/requestDTO";
+import { ProjectRequestDTO } from "../../../domains/express/project-request-dto";
 
-export const requestDtoSchema: JSONSchemaType<RequestDTO> = {
+export const requestDtoSchema: JSONSchemaType<ProjectRequestDTO> = {
   type: "object",
   properties: {
     name: { type: "string" },

@@ -1,6 +1,6 @@
 import Express from "express";
 import { expressRouter } from "./domains/express/routes";
-import { globalErrorHandler } from "./domains/express/lib/templates/express/globalErrorHandler";
+import { globalErrorHandler } from "./middleware/globalErrorHandler";
 
 const PORT = process.env.PORT;
 

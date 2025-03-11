@@ -1,4 +1,4 @@
-import { findNpmPacakgeVersion } from "../npm-pacakge-finder";
+import { findNpmPacakgeVersion } from "../../npm-pacakge-finder";
 
 type PackageJsonTemplate = {
   name: string;
