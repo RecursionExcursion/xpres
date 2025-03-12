@@ -1,18 +1,24 @@
 import { PACKAGE_JSON } from "../../../src/domains/express/constants";
 import { initPackageJson } from "../../../src/domains/express/lib/starter-factory/init-package-json";
 import { ProjectMap } from "../../../src/domains/express/lib/starter-factory/project-factory";
-import {
-  getMockProjectMap,
-  getMockRequestJs,
-  getMockRequestTs,
-} from "../../mockData";
+import { getMockProjectMap, getMockRequest } from "../../mockData";
 
-describe("init-pacakge-json", () => {
+describe("init-package-json", () => {
   describe("ts", () => {
+    const mockRequest = getMockRequest();
+    mockRequest.env = {
+      vars: {},
+    };
+    mockRequest.ts = {
+      findTypeDependencies: true,
+      useDefaultNpmPackage: true,
+      config: { args: {} },
+    };
+
     test("scripts", async () => {
       const { projectMap } = await initPackageJson({
         projectMap: getMockProjectMap(),
-        request: getMockRequestTs(),
+        request: mockRequest,
       });
 
       const packageJsonObj = getpackageJsonObject(projectMap);
@@ -28,7 +34,7 @@ describe("init-pacakge-json", () => {
     test("Dev Dependencies", async () => {
       const { request } = await initPackageJson({
         projectMap: getMockProjectMap(),
-        request: getMockRequestTs(),
+        request: getMockRequest(),
       });
       const devDep = request.packageJson.devDependencies;
 
@@ -40,7 +46,7 @@ describe("init-pacakge-json", () => {
     test("Dependencies", async () => {
       const { request } = await initPackageJson({
         projectMap: getMockProjectMap(),
-        request: getMockRequestTs(),
+        request: getMockRequest(),
       });
       const dep = request.packageJson.dependencies;
       expect(dep.sort()).toEqual(["express"].sort());
@@ -50,7 +56,7 @@ describe("init-pacakge-json", () => {
       test("type", async () => {
         const { projectMap } = await initPackageJson({
           projectMap: getMockProjectMap(),
-          request: getMockRequestTs(),
+          request: getMockRequest(),
         });
         const packageJsonObj = getpackageJsonObject(projectMap);
         expect(packageJsonObj.type).toBe("commonjs");
@@ -61,9 +67,14 @@ describe("init-pacakge-json", () => {
   describe("js", () => {
     describe("misc fields", () => {
       test("type", async () => {
+        const mockRequest = getMockRequest();
+        mockRequest.env = {
+          vars: {},
+        };
+
         const { projectMap } = await initPackageJson({
           projectMap: getMockProjectMap(),
-          request: getMockRequestTs(),
+          request: mockRequest,
         });
         const packageJsonObj = getpackageJsonObject(projectMap);
         expect(packageJsonObj.type).toBe("commonjs");
@@ -71,9 +82,14 @@ describe("init-pacakge-json", () => {
     });
 
     test("scripts", async () => {
+      const mockRequest = getMockRequest();
+      mockRequest.env = {
+        vars: {},
+      };
+
       const { projectMap } = await initPackageJson({
         projectMap: getMockProjectMap(),
-        request: getMockRequestJs(),
+        request: mockRequest,
       });
 
       const packageJsonObj = getpackageJsonObject(projectMap);

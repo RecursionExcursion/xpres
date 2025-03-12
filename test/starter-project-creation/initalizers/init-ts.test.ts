@@ -1,16 +1,21 @@
 import { TS_CONFIG } from "../../../src/domains/express/constants";
 import { initTs } from "../../../src/domains/express/lib/starter-factory/init-ts";
-import {
-  getMockProjectMap,
-  getMockRequestJs,
-  getMockRequestTs,
-} from "../../mockData";
+import { getMockProjectMap, getMockRequest } from "../../mockData";
 
 describe("init-ts Test", () => {
   describe("ts", () => {
+    const mockReq = getMockRequest();
+    mockReq.ts = {
+      findTypeDependencies: true,
+      useDefaultNpmPackage: true,
+      config: {
+        args: {},
+      },
+    };
+
     const { projectMap } = initTs({
       projectMap: getMockProjectMap(),
-      request: getMockRequestTs(),
+      request: mockReq,
     });
 
     test("ts config generation", () => {
@@ -29,9 +34,12 @@ describe("init-ts Test", () => {
   });
 
   describe("js", () => {
+    const mockRequest = getMockRequest();
+    mockRequest.ts = undefined;
+
     const { projectMap } = initTs({
       projectMap: getMockProjectMap(),
-      request: getMockRequestJs(),
+      request: mockRequest,
     });
 
     test("ts-config", () => {

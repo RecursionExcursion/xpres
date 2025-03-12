@@ -7,9 +7,9 @@ import { PipeParams } from "./project-factory";
 export function initSrc(params: PipeParams): PipeParams {
   const { request, projectMap } = params;
 
-  const usingTs = request.ts.use;
+  const usingTs = request.ts !== undefined;
 
-  if (request.src.use) {
+  if (request.src) {
     const srcRoot = request.src.includeFolder ? "./src" : ".";
     const domainRouters: { path: string; name: string }[] = [];
 
@@ -19,9 +19,7 @@ export function initSrc(params: PipeParams): PipeParams {
       domains.forEach((domain) => {
         const domainDir = `${srcRoot}/domains/${domain}`;
 
-        function resolveFileExt() {
-          return request.ts.use ? ".ts" : ".js";
-        }
+        const resolveFileExt = () => (usingTs ? ".ts" : ".js");
 
         //TODO Add logic to resovle ts vs js (file ext included)
         const routerFileName = `${domain}-router`;
@@ -107,7 +105,7 @@ function createIndexFile(params: {
 }) {
   const { request, domainRouters, script, usingTs } = params;
 
-  const fileName = request.ts.use ? "index.ts" : "index.js";
+  const fileName = usingTs ? "index.ts" : "index.js";
 
   const content = generateJsFile({
     fileName,

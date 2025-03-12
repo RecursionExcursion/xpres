@@ -5,12 +5,12 @@ import { PipeParams } from "./project-factory";
 
 export function initTs(params: PipeParams): PipeParams {
   const { request, projectMap } = params;
-  if (request.ts.use) {
+  if (request.ts) {
     // if (request.ts.useDefaultNpmPackage) {
     //   request.packageJson.devDependencies.push("typescript");
     // }
 
-    if (request.ts.config.use) {
+    if (request.ts.config) {
       const config = generateTsConfig();
       projectMap.set(`/${TS_CONFIG}`, config.fileContent);
 

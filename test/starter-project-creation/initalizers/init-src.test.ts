@@ -1,15 +1,25 @@
 import { initSrc } from "../../../src/domains/express/lib/starter-factory/init-src";
-import {
-  getMockProjectMap,
-  getMockRequestJs,
-  getMockRequestTs,
-} from "../../mockData";
+import { getMockProjectMap, getMockRequest } from "../../mockData";
 
 describe("init-src Test", () => {
   describe("ts", () => {
+    const mockRequest = getMockRequest();
+
+    mockRequest.src = {
+      includeFolder: true,
+      domains: ["foo", "bar"],
+    };
+    mockRequest.ts = {
+      useDefaultNpmPackage: true,
+      findTypeDependencies: true,
+      config: {
+        args: {},
+      },
+    };
+
     const { projectMap } = initSrc({
       projectMap: getMockProjectMap(),
-      request: getMockRequestTs(),
+      request: mockRequest,
     });
 
     test("index file", () => {
@@ -100,9 +110,15 @@ describe("init-src Test", () => {
   });
 
   describe("js", () => {
+    const mockRequest = getMockRequest();
+    mockRequest.src = {
+      includeFolder: true,
+      domains: ["foo", "bar"],
+    };
+
     const { projectMap } = initSrc({
       projectMap: getMockProjectMap(),
-      request: getMockRequestJs(),
+      request: mockRequest,
     });
 
     test("index file", () => {
@@ -193,8 +209,11 @@ describe("init-src Test", () => {
   });
 
   describe("js no src folder", () => {
-    const mockRequest = getMockRequestJs();
-    mockRequest.src.includeFolder = false;
+    const mockRequest = getMockRequest();
+    mockRequest.src = {
+      includeFolder: false,
+      domains: [],
+    };
 
     const { projectMap } = initSrc({
       projectMap: getMockProjectMap(),

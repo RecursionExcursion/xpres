@@ -4,7 +4,7 @@ import { PipeParams } from "./project-factory";
 
 export function initGitIgnore(params: PipeParams): PipeParams {
   const { request, projectMap } = params;
-  if (request.git.ignore) {
+  if (request.git) {
     projectMap.set(`/${GIT_IGNORE}`, generateGitIgnore(request.git.toIgnore));
   }
 

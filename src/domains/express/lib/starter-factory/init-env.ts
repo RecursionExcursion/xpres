@@ -6,7 +6,7 @@ import { PipeParams } from "./project-factory";
 export function initEnv(params: PipeParams): PipeParams {
   const { request, projectMap } = params;
 
-  if (request.env.use) {
+  if (request.env) {
     projectMap.set(`/${ENV}`, generateEnvFile(request.env.vars));
   }
 

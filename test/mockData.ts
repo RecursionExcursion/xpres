@@ -12,30 +12,6 @@ const mockRequestTs: ProjectRequestDTO = {
     scripts: {},
     moduleType: "commonjs",
   },
-  src: {
-    use: true,
-    includeFolder: true,
-    domains: ["foo", "bar"],
-  },
-  git: {
-    ignore: true,
-    toIgnore: ["/dist", ".env"],
-  },
-  env: {
-    use: true,
-    vars: {
-      PORT: "8080",
-    },
-  },
-  ts: {
-    use: true,
-    useDefaultNpmPackage: true,
-    findTypeDependencies: true,
-    config: {
-      use: true,
-      args: {},
-    },
-  },
 };
 
 const mockRequestJs: ProjectRequestDTO = {
@@ -47,32 +23,7 @@ const mockRequestJs: ProjectRequestDTO = {
     scripts: {},
     moduleType: "commonjs",
   },
-  src: {
-    use: true,
-    includeFolder: true,
-    domains: ["foo", "bar"],
-  },
-  git: {
-    ignore: true,
-    toIgnore: [".env"],
-  },
-  env: {
-    use: true,
-    vars: {
-      PORT: "8080",
-    },
-  },
-  ts: {
-    use: false,
-    useDefaultNpmPackage: false,
-    findTypeDependencies: false,
-    config: {
-      use: false,
-      args: {},
-    },
-  },
 };
 
 export const getMockProjectMap = () => structuredClone(mockProjectMap);
-export const getMockRequestTs = () => structuredClone(mockRequestTs);
-export const getMockRequestJs = () => structuredClone(mockRequestJs);
+export const getMockRequest = () => structuredClone(mockRequestTs);

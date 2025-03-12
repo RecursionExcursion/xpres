@@ -11,26 +11,21 @@ export const projectTemplates: Record<string, ProjectRequestDTO> = {
       moduleType: "commonjs",
     },
     src: {
-      use: true,
       includeFolder: true,
       domains: ["test", "foof"],
     },
     git: {
-      ignore: true,
       toIgnore: ["/dist", ".env"],
     },
     env: {
-      use: true,
       vars: {
         PORT: "8080",
       },
     },
     ts: {
-      use: true,
       useDefaultNpmPackage: true,
       findTypeDependencies: true,
       config: {
-        use: true,
         args: {},
       },
     },
@@ -46,26 +41,21 @@ export const projectTemplates: Record<string, ProjectRequestDTO> = {
       moduleType: "commonjs",
     },
     src: {
-      use: true,
       includeFolder: true,
       domains: [],
     },
     git: {
-      ignore: true,
       toIgnore: [".env"],
     },
     env: {
-      use: true,
       vars: {
         PORT: "8080",
       },
     },
     ts: {
-      use: false,
       useDefaultNpmPackage: false,
       findTypeDependencies: false,
       config: {
-        use: false,
         args: {},
       },
     },

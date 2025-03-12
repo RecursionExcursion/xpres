@@ -26,11 +26,11 @@ function setScripts(request: ProjectRequestDTO) {
 
     startScriptTemplate = startScriptTemplate.replace(
       "<env-config>",
-      request.env.use ? "--env-file=.env" : ""
+      request.env ? "--env-file=.env" : ""
     );
 
-    if (request.ts.use) {
-      if (request.ts.config.use) {
+    if (request.ts) {
+      if (request.ts.config) {
         startScriptTemplate = startScriptTemplate.replace(
           "<target-file>",
           request.ts.config.args["outDir"] ?? "/dist/index.js"
@@ -45,7 +45,8 @@ function setScripts(request: ProjectRequestDTO) {
 
     request.packageJson.scripts.start = startScriptTemplate;
   }
-  if (request.ts.use) {
+  
+  if (request.ts) {
     if (!request.packageJson.scripts.build) {
       request.packageJson.scripts.build = `tsc`;
     }

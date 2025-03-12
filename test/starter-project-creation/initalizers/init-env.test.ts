@@ -1,12 +1,14 @@
 import { ENV } from "../../../src/domains/express/constants";
 import { initEnv } from "../../../src/domains/express/lib/starter-factory/init-env";
-import { getMockProjectMap, getMockRequestTs } from "../../mockData";
+import { getMockProjectMap, getMockRequest } from "../../mockData";
 
 describe("init-env Test", () => {
   test("env.use = true", () => {
-    const mockRequest = getMockRequestTs();
-    mockRequest.env.use = true;
-    mockRequest.env.vars = { PORT: "8080" };
+    const mockRequest = getMockRequest();
+    mockRequest.env = {
+      vars: { PORT: "8080" },
+    };
+
     const { projectMap } = initEnv({
       projectMap: getMockProjectMap(),
       request: mockRequest,
@@ -18,8 +20,9 @@ describe("init-env Test", () => {
     expect(gitIgnoreContents?.includes("PORT = 8080"));
   });
   test("env.use = false", () => {
-    const mockRequest = getMockRequestTs();
-    mockRequest.env.use = false;
+    const mockRequest = getMockRequest();
+    mockRequest.env = undefined;
+
     const { projectMap } = initEnv({
       projectMap: getMockProjectMap(),
       request: mockRequest,

@@ -1,7 +1,7 @@
 import { ModuleType } from "./constants";
 
 export type ProjectRequestDTO = {
-  name: string,
+  name: string;
   runtime: "node";
   packageJson: {
     moduleType: ModuleType;
@@ -9,27 +9,22 @@ export type ProjectRequestDTO = {
     devDependencies: string[];
     scripts: { [key: string]: string };
   };
-  src: {
-    use: boolean;
+  src?: {
     includeFolder: boolean;
     domains: string[];
   };
-  git: {
-    ignore: boolean;
+  git?: {
     toIgnore: string[];
   };
-  env: {
-    use: boolean;
+  env?: {
     vars: {
       [key: string]: string;
     };
   };
-  ts: {
-    use: boolean;
+  ts?: {
     useDefaultNpmPackage: boolean;
     findTypeDependencies: boolean;
     config: {
-      use: boolean;
       args: {
         [key: string]: string;
       };
