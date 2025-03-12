@@ -37,7 +37,15 @@ export function createModuleImport(
     }
 
     if (destructuredImports) {
-      importObjects.push(toDestructredObjectString(destructuredImports));
+      const importString = toDestructredObjectString(destructuredImports);
+
+      if (importString) {
+        importObjects.push(importString);
+      }
+    }
+
+    if (!importObjects.length) {
+      throw Error("Import objects cannot be null. ESM");
     }
 
     return createImportStatment("module", importObjects.join(", "), path);
@@ -48,6 +56,10 @@ export function createModuleImport(
       ? defaultImport
       : toDestructredObjectString(destructuredImports);
 
+    if (!importObjects) {
+      throw Error("Import objects cannot be null. Commonjs");
+    }
+
     return createImportStatment("commonjs", importObjects, path);
   };
 
@@ -56,60 +68,5 @@ export function createModuleImport(
 
 function toDestructredObjectString(destructuredImportObjs: string[]) {
   const objs = destructuredImportObjs;
-  return objs?.length ? `{ ${objs?.join(", ")} }` : "";
+  return objs?.length ? `{ ${objs?.join(", ")} }` : null;
 }
-
-// static #createImportStatment = (() => {
-//   const esmKeyWords = ["import ", ` from "`, `";`];
-//   const commonjsKeyWords = ["const ", ` = require("`, `");`];
-
-//   return (type: ModuleType, importObjects: string, path: string) => {
-//     const keyWords =
-//       type === "module" ? [...esmKeyWords] : [...commonjsKeyWords];
-//     keyWords.splice(1, 0, importObjects);
-//     keyWords.splice(keyWords.length - 1, 0, path);
-//     return keyWords.join("");
-//   };
-// })();
-
-// export class ModuleImport2 {
-//   destructured?: string[];
-//   default?: string;
-//   path!: string;
-
-//   constructor(params: Partial<ModuleImport> & { path: string }) {
-//     Object.assign(this, params);
-//   }
-
-//   module(): string {}
-
-//   commonjs(): string {
-//     const importObjects = this.default
-//       ? this.default
-//       : this.#toDestructredObjectString();
-
-//     return ModuleImport.#createImportStatment(
-//       "commonjs",
-//       importObjects,
-//       this.path
-//     );
-//   }
-
-//   // #toDestructredObjectString() {
-//   //   const objs = this.destructured;
-//   //   return objs?.length ? `{ ${objs?.join(", ")} }` : "";
-//   // }
-
-//   // static #createImportStatment = (() => {
-//   //   const esmKeyWords = ["import ", ` from "`, `";`];
-//   //   const commonjsKeyWords = ["const ", ` = require("`, `");`];
-
-//   //   return (type: ModuleType, importObjects: string, path: string) => {
-//   //     const keyWords =
-//   //       type === "module" ? [...esmKeyWords] : [...commonjsKeyWords];
-//   //     keyWords.splice(1, 0, importObjects);
-//   //     keyWords.splice(keyWords.length - 1, 0, path);
-//   //     return keyWords.join("");
-//   //   };
-//   // })();
-// }

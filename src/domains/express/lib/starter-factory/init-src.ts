@@ -10,7 +10,7 @@ export function initSrc(params: PipeParams): PipeParams {
   const usingTs = request.ts.use;
 
   if (request.src.use) {
-    const srcRoot = request.src.includeFolder ? "/src" : "/";
+    const srcRoot = request.src.includeFolder ? "./src" : ".";
     const domainRouters: { path: string; name: string }[] = [];
 
     if (request.src.domains.length) {
@@ -72,7 +72,7 @@ export function initSrc(params: PipeParams): PipeParams {
     const indexScript = [
       "const PORT = process.env.PORT",
       "const app = Express();",
-      `app.listen(PORT, () => console.log('App listening on PORT:' + PORT));`,
+      "app.listen(PORT, () => console.log('App listening on PORT:' + PORT));",
     ];
 
     //Inject routers
@@ -90,7 +90,7 @@ export function initSrc(params: PipeParams): PipeParams {
         usingTs,
       });
 
-    projectMap.set(`/${srcRoot}/${indexFileName}`, indexFileContent);
+    projectMap.set(`${srcRoot}/${indexFileName}`, indexFileContent);
   }
 
   return params;

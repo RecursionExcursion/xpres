@@ -72,20 +72,6 @@ export function generateTsConfig(optionArgs?: { [key: string]: string }) {
   };
 }
 
-// export class TsConfigGenerator {
-//   constructor(optionArgs?: { [key: string]: string }) {}
-
-//   toJson() {}
-
-//   get rootDir() {
-//     return this.base.rootDir;
-//   }
-
-//   get outDir() {
-//     return this.base.outDir;
-//   }
-// }
-
 export const tsConfigTemplateString = `
     {
       /* Visit https://aka.ms/tsconfig to read more about this file */

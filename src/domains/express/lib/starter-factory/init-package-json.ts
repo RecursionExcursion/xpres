@@ -21,7 +21,7 @@ export async function initPackageJson(params: PipeParams): Promise<PipeParams> {
 }
 
 function setScripts(request: ProjectRequestDTO) {
-  if (!request.packageJson.scripts["start"]) {
+  if (!request.packageJson.scripts.start) {
     let startScriptTemplate = "node <env-config> <target-file>";
 
     startScriptTemplate = startScriptTemplate.replace(
@@ -33,7 +33,7 @@ function setScripts(request: ProjectRequestDTO) {
       if (request.ts.config.use) {
         startScriptTemplate = startScriptTemplate.replace(
           "<target-file>",
-          request.ts.config.args["outDir"] ?? "/dist/index.ts"
+          request.ts.config.args["outDir"] ?? "/dist/index.js"
         );
       }
     } else {
@@ -44,5 +44,13 @@ function setScripts(request: ProjectRequestDTO) {
     }
 
     request.packageJson.scripts.start = startScriptTemplate;
+  }
+  if (request.ts.use) {
+    if (!request.packageJson.scripts.build) {
+      request.packageJson.scripts.build = `tsc`;
+    }
+    if (!request.packageJson.scripts.dev) {
+      request.packageJson.scripts.dev = `npm run build && npm run start`;
+    }
   }
 }

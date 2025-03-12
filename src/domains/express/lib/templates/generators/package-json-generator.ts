@@ -30,7 +30,6 @@ export async function generatePackageJson(params: {
       build: "",
       dev: "",
       test: "",
-      install: "",
     },
     keywords: [],
     author: "",
