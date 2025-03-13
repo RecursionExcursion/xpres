@@ -28,7 +28,9 @@ export const expressController = {
 
     res.setHeader("Content-Type", "application/zip");
     zipFileMap(
-      await expressService.createExpressStarterProject(projectTemplates[template]),
+      await expressService.createExpressStarterProject(
+        projectTemplates[template]
+      ),
       res
     );
   },
@@ -39,5 +41,15 @@ export const expressController = {
     const v = await findNpmPacakgeVersion(packageName);
 
     res.send({ v });
+  },
+
+  async getTemplates(req: Request, res: Response, next: NextFunction) {
+    try {
+      console.log('tampltes');
+      
+      res.send(projectTemplates);
+    } catch (err) {
+      next(err);
+    }
   },
 };

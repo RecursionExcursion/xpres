@@ -3,7 +3,7 @@ import { ProjectRequestDTO } from "../project-request-dto";
 
 export const projectTemplates: Record<string, ProjectRequestDTO> = {
   ts: {
-    name: "Foo",
+    name: "ts starter",
     runtime: "node",
     packageJson: {
       dependencies: [...npmPackageGroups.express.dependency],
@@ -36,7 +36,7 @@ export const projectTemplates: Record<string, ProjectRequestDTO> = {
   },
 
   js: {
-    name: "Foo",
+    name: "js starter",
     runtime: "node",
     packageJson: {
       dependencies: [...npmPackageGroups.express.dependency],

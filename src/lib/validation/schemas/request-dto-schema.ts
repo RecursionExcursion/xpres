@@ -34,8 +34,8 @@ export const requestDtoSchema: JSONSchemaType<ProjectRequestDTO> = {
     },
     src: {
       type: "object",
+      nullable: true,
       properties: {
-        use: { type: "boolean" },
         includeFolder: { type: "boolean" },
         domains: {
           type: "array",
@@ -44,23 +44,23 @@ export const requestDtoSchema: JSONSchemaType<ProjectRequestDTO> = {
           },
         },
       },
-      required: ["domains", "includeFolder", "use"],
+      required: ["domains", "includeFolder"],
     },
     git: {
       type: "object",
+      nullable: true,
       properties: {
-        ignore: { type: "boolean" },
         toIgnore: {
           type: "array",
           items: { type: "string" },
         },
       },
-      required: ["ignore", "toIgnore"],
+      required: ["toIgnore"],
     },
     env: {
       type: "object",
+      nullable: true,
       properties: {
-        use: { type: "boolean" },
         vars: {
           type: "object",
           additionalProperties: {
@@ -69,18 +69,17 @@ export const requestDtoSchema: JSONSchemaType<ProjectRequestDTO> = {
           required: [],
         },
       },
-      required: ["use", "vars"],
+      required: ["vars"],
     },
     ts: {
       type: "object",
+      nullable: true,
       properties: {
-        use: { type: "boolean" },
         useDefaultNpmPackage: { type: "boolean" },
         findTypeDependencies: { type: "boolean" },
         config: {
           type: "object",
           properties: {
-            use: { type: "boolean" },
             args: {
               type: "object",
               additionalProperties: {
@@ -89,16 +88,11 @@ export const requestDtoSchema: JSONSchemaType<ProjectRequestDTO> = {
               required: [],
             },
           },
-          required: ["use", "args"],
+          required: ["args"],
         },
       },
-      required: [
-        "use",
-        "useDefaultNpmPackage",
-        "findTypeDependencies",
-        "config",
-      ],
+      required: ["useDefaultNpmPackage", "findTypeDependencies", "config"],
     },
   },
-  required: ["name", "packageJson", "src", "git", "env", "ts"],
+  required: ["name", "runtime"],
 };
