@@ -5,15 +5,15 @@ describe("findNpmPacakgeVersion Test", () => {
     jest.restoreAllMocks();
   });
 
-  test("returns result of actual package", async () => {
+  test("returns result of actual package Test", async () => {
     expect(!!(await findNpmPacakgeVersion("express"))).toEqual(true);
   });
 
-  test("Return null if bad package", async () => {
+  test("Return null if bad package Test", async () => {
     expect(await findNpmPacakgeVersion("")).toBeNull();
   });
 
-  test("returns latest stable version when package exists", async () => {
+  test("Return latest stable version Test", async () => {
     const mockJsonResponse = {
       versions: {
         "1.0.0": {},
@@ -33,7 +33,7 @@ describe("findNpmPacakgeVersion Test", () => {
     expect(result).toBe("1.1.0");
   });
 
-  test("returns null when fetch fails", async () => {
+  test("Fetch failure Test", async () => {
     jest.spyOn(global, "fetch").mockResolvedValue({
       ok: false,
       json: jest.fn(),

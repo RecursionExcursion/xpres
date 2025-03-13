@@ -1,4 +1,7 @@
-import { PACKAGE_JSON } from "../../../src/domains/express/constants";
+import {
+  npmPackageGroups,
+  PACKAGE_JSON,
+} from "../../../src/domains/express/constants";
 import { initPackageJson } from "../../../src/domains/express/lib/starter-factory/init-package-json";
 import { ProjectMap } from "../../../src/domains/express/lib/starter-factory/project-factory";
 import { getMockProjectMap, getMockRequest } from "../../mockData";
@@ -39,7 +42,11 @@ describe("init-package-json", () => {
       const devDep = request.packageJson.devDependencies;
 
       expect(devDep.sort()).toEqual(
-        ["typescript", "@types/node", "@types/express"].sort()
+        [
+          ...npmPackageGroups.typescript.devDependency,
+          ...npmPackageGroups.node.typeDependency,
+          ...npmPackageGroups.express.typeDependency,
+        ].sort()
       );
     });
 
@@ -48,8 +55,11 @@ describe("init-package-json", () => {
         projectMap: getMockProjectMap(),
         request: getMockRequest(),
       });
+
       const dep = request.packageJson.dependencies;
-      expect(dep.sort()).toEqual(["express"].sort());
+      expect(dep.sort()).toEqual(
+        [...npmPackageGroups.express.dependency].sort()
+      );
     });
 
     describe("misc fields", () => {
@@ -58,6 +68,7 @@ describe("init-package-json", () => {
           projectMap: getMockProjectMap(),
           request: getMockRequest(),
         });
+
         const packageJsonObj = getpackageJsonObject(projectMap);
         expect(packageJsonObj.type).toBe("commonjs");
       });

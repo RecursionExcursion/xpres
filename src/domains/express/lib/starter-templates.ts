@@ -1,3 +1,4 @@
+import { npmPackageGroups } from "../constants";
 import { ProjectRequestDTO } from "../project-request-dto";
 
 export const projectTemplates: Record<string, ProjectRequestDTO> = {
@@ -5,8 +6,11 @@ export const projectTemplates: Record<string, ProjectRequestDTO> = {
     name: "Foo",
     runtime: "node",
     packageJson: {
-      dependencies: ["express"],
-      devDependencies: ["@types/express", "@types/node"],
+      dependencies: [...npmPackageGroups.express.dependency],
+      devDependencies: [
+        ...npmPackageGroups.express.typeDependency,
+        ...npmPackageGroups.node.typeDependency,
+      ],
       scripts: {},
       moduleType: "commonjs",
     },
@@ -35,7 +39,7 @@ export const projectTemplates: Record<string, ProjectRequestDTO> = {
     name: "Foo",
     runtime: "node",
     packageJson: {
-      dependencies: ["express"],
+      dependencies: [...npmPackageGroups.express.dependency],
       devDependencies: [],
       scripts: {},
       moduleType: "commonjs",

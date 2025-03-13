@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { expressService } from "./service";
 import { zipFileMap } from "../../lib/zipper";
-import { projectTemplates } from "./lib/project-templates";
+import { projectTemplates } from "./lib/starter-templates";
 import { ProjectRequestDTO } from "./project-request-dto";
 import { findNpmPacakgeVersion } from "./lib/npm-pacakge-finder";
 
