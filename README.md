@@ -55,7 +55,8 @@ The API will start on the port you defined in .env.
 
 ## 🔌 API Endpoints
 
-Base path: /express
+## Base path: /express
+
 ### GET /express/starter/:template
 
 Returns a zipped starter folder with the selected template (js or ts).
