@@ -53,7 +53,7 @@ npm run start
 
 The API will start on the port you defined in .env.
 
-##🔌 API Endpoints
+## 🔌 API Endpoints
 
 Base path: /express
 ### GET /express/starter/:template
